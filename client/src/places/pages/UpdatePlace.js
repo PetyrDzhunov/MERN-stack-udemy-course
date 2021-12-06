@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import Button from '../../shared/components/FormElements/Button';
 import Input from '../../shared/components/FormElements/Input';
@@ -6,33 +6,65 @@ import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../shared/util/valida
 import { DUMMY_PLACES } from './UserPlaces';
 import './PlaceForm.css'
 import { useForm } from '../../shared/hooks/form-hook';
+import Card from '../../shared/components/UIElements/Card';
 
 const UpdatePlace = () => {
+	const [isLoading, setIsLoading] = useState(true);
 	const { placeId } = useParams();
 
-	const identifiedPlace = DUMMY_PLACES.find((place) => place.id === placeId);
-
-	const [formState, inputHandler] = useForm({
+	const [formState, inputHandler, setFormData] = useForm({
 		title: {
-			value: identifiedPlace.title,
-			isValid: true
+			value: '',
+			isValid: false
 		},
 		description: {
-			value: identifiedPlace.description,
-			isValid: true
+			value: '',
+			isValid: false
 		}
-	}, true)
+	}, false)
 
-	if (!identifiedPlace) {
-		return <div className="center">
-			<h2>Could not find place!</h2>
-		</div>
-	};
+
+	const identifiedPlace = DUMMY_PLACES.find((place) => place.id === placeId);
+	useEffect(() => {
+		if (identifiedPlace) {
+			setFormData(
+				{
+					title: {
+						value: identifiedPlace.title,
+						isValid: true
+					},
+					description: {
+						value: identifiedPlace.description,
+						isValid: true
+					}
+				}
+				, true
+			);
+		};
+
+		setIsLoading(false);
+	}, [setFormData, identifiedPlace]);
+
 
 	const placeUpdateSubmitHandler = (e) => {
 		e.preventDefault();
 		console.log(formState.inputs);
 	};
+
+	if (!identifiedPlace) {
+		return <div className="center">
+			<Card>
+				<h2>Could not find place!</h2>
+			</Card>
+		</div>
+	};
+
+
+	if (isLoading) {
+		return <div className="center">
+			<h2>Loading...</h2>
+		</div>
+	}
 
 	return (
 		<form onSubmit={placeUpdateSubmitHandler} className="place-form">
@@ -61,7 +93,9 @@ const UpdatePlace = () => {
 
 			<Button type="submit" disabled={!formState.isValid}>UPDATE PLACE</Button>
 		</form>
+
 	);
 };
 
 export default UpdatePlace;
+

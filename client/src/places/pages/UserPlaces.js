@@ -22,7 +22,7 @@ export const DUMMY_PLACES = [
 const UserPlaces = () => {
 	const { userId } = useParams();
 	const loadedPlaces = DUMMY_PLACES.filter((place) => place.creator == userId);
-	return <PlaceList items={loadedPlaces} />
+	return <PlaceList items={[]} />
 };
 
 export default UserPlaces;
