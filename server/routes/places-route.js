@@ -15,26 +15,31 @@ const DUMMY_PLACES = [
 	}
 ];
 
-router.get('/', (req, res) => {
-	console.log('GET REQUEST in Places');
-	res.json({ message: 'It works!' });
-});
 
-router.get('/:pid', (req, res) => {
+router.get('/:pid', (req, res, next) => {
 	const { pid } = req.params;
-	console.log(pid);
 	const place = DUMMY_PLACES.find((place) => place.id === pid);
-	console.log(place);
+	if (!place) {
+		const error = new Error('Could not find a place for the provided id.');
+		error.code = 404;
+		next(error);
+		return;
+	};
+
 	res.json({ place });
 });
 
-router.get('/user/:uid', (req, res) => {
+router.get('/user/:uid', (req, res, next) => {
 	const { uid } = req.params;
 	const places = DUMMY_PLACES.find((place) => place.creator === uid);
-	if (places && places.length > 0) {
-		res.json(places);
+	if (!places) {
+		const error = {
+			code: 404,
+			message: 'Could not find a place for the provided user id.'
+		};
+		next(error);
+		return;
 	};
-
 });
 
 
