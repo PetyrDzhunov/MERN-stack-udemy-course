@@ -2,7 +2,7 @@ import React from 'react';
 import PlaceList from '../components/PlaceList';
 import { useParams } from 'react-router-dom';
 
-const DUMMY_PLACES = [
+export const DUMMY_PLACES = [
 	{
 		id: 'p1', title: 'Empire State Building', description: "One of the most famous sky scrapers in the world!",
 		imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Empire_State_Building_from_the_Top_of_the_Rock.jpg',
