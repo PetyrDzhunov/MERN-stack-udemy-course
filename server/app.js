@@ -1,10 +1,10 @@
 const express = require('express');
-const bodyParser = require("body-parser");
 
 
 const { PORT } = require("./constants");
 const placesRoutes = require('./routes/places-route');
 const app = express();
+
 
 app.use('/api/places', placesRoutes)
 
