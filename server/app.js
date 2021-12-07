@@ -3,7 +3,9 @@ const { PORT } = require("./constants");
 const placesRoutes = require('./routes/places-route');
 const usersRoutes = require('./routes/users-routes');
 const HttpError = require('./models/https-error');
+const { MONGODB_CONNECTION_STRING } = require('./constants');
 const app = express();
+const mongoose = require('mongoose');
 
 app.use(express.json());
 
@@ -25,4 +27,9 @@ app.use((error, req, res, next) => {
 
 });
 
-app.listen(PORT, () => console.log(`Sever is running on port ${PORT}`))
+
+mongoose.connect(MONGODB_CONNECTION_STRING)
+	.then(() => {
+		app.listen(PORT, () => console.log(`Sever is running on port ${PORT}`))
+	})
+	.catch(() => console.log('Database failed to connect'));
