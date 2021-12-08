@@ -6,8 +6,11 @@ const HttpError = require('./models/https-error');
 const { MONGODB_CONNECTION_STRING } = require('./constants');
 const app = express();
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 app.use(express.json());
+
+app.use(cors());
 
 app.use('/api/places', placesRoutes)
 app.use('/api/users', usersRoutes)

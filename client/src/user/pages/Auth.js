@@ -38,7 +38,8 @@ const Auth = () => {
 						email: formState.inputs.email.value,
 						password: formState.inputs.password.value,
 					})
-				})
+				});
+				console.log(response);
 				const data = await response.json();
 				console.log(data);
 			} catch (error) {
