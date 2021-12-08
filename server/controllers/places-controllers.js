@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator');
+const fs = require('fs');
 const mongoose = require('mongoose');
 
 const HttpError = require('../models/https-error');
@@ -66,17 +67,14 @@ const createPlace = async (req, res, next) => {
 			new HttpError('Invalid inputs passed, please check your data.', 422)
 		);
 	}
-
 	const { title, description, address, creator } = req.body;
-
 
 	const createdPlace = new Place({
 		title,
 		description,
 		address,
 		location: null,
-		image:
-			'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/400px-Empire_State_Building_%28aerial_view%29.jpg',
+		image: req.file.path,
 		creator
 	});
 
@@ -92,8 +90,6 @@ const createPlace = async (req, res, next) => {
 		const error = new HttpError('Could not find user for provided id', 404);
 		return next(error);
 	}
-
-	console.log(user);
 
 	try {
 		const sess = await mongoose.startSession();
@@ -170,6 +166,8 @@ const deletePlace = async (req, res, next) => {
 		return next(error);
 	}
 
+	const imagePath = place.image;
+
 	try {
 		const sess = await mongoose.startSession();
 		sess.startTransaction();
@@ -183,7 +181,11 @@ const deletePlace = async (req, res, next) => {
 			500
 		);
 		return next(error);
-	}
+	};
+
+	fs.unlink(imagePath, (err) => {
+		console.log(err);
+	});
 
 	res.status(200).json({ message: 'Deleted place.' });
 };
