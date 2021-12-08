@@ -1,15 +1,22 @@
-import React, { useState, useContext } from 'react'
-import { useForm } from '../../shared/hooks/form-hook'
-import Button from '../../shared/components/FormElements/Button'
-import Input from '../../shared/components/FormElements/Input'
-import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../shared/util/validators'
+import React, { useState, useContext } from 'react';
+import { useForm } from '../../shared/hooks/form-hook';
+import Button from '../../shared/components/FormElements/Button';
+import Input from '../../shared/components/FormElements/Input';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../shared/util/validators';
 import './Auth.css';
-import Card from '../../shared/components/UIElements/Card'
-import { AuthContext } from '../../shared/context/auth-context'
+import Card from '../../shared/components/UIElements/Card';
+import { AuthContext } from '../../shared/context/auth-context';
+
+
 
 const Auth = () => {
 	const auth = useContext(AuthContext);
 	const [isLoginMode, setIsLoginMode] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState();
+
 	const [formState, inputHandler, setFormData] = useForm({
 		email: {
 			value: '',
@@ -28,6 +35,7 @@ const Auth = () => {
 
 		} else {
 			try {
+				setIsLoading(true);
 				const response = await fetch("http://localhost:5000/api/users/signup", {
 					method: 'POST',
 					headers: {
@@ -39,13 +47,13 @@ const Auth = () => {
 						password: formState.inputs.password.value,
 					})
 				});
-				console.log(response);
 				const data = await response.json();
-				console.log(data);
+				setIsLoading(false);
+				auth.login();
 			} catch (error) {
+				setError(error.message || 'Something went wrong, please try again.');
 				console.log(error);
 			};
-			auth.login();
 		};
 	};
 
@@ -70,6 +78,7 @@ const Auth = () => {
 
 	return (
 		<Card className="authentication">
+			{isLoading && <LoadingSpinner asOverlay />}
 			<h2>Login Required</h2>
 			<hr />
 			<form onSubmit={authSubmitHandler}>
@@ -117,4 +126,4 @@ const Auth = () => {
 	);
 };
 
-export default Auth
+export default Auth;
