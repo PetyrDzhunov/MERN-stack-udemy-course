@@ -3,10 +3,13 @@ import { useParams } from 'react-router-dom';
 import Button from '../../shared/components/FormElements/Button';
 import Input from '../../shared/components/FormElements/Input';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../shared/util/validators';
-import { DUMMY_PLACES } from './UserPlaces';
 import './PlaceForm.css'
 import { useForm } from '../../shared/hooks/form-hook';
 import Card from '../../shared/components/UIElements/Card';
+
+const DUMMY_PLACES = [
+	{ title: 'title1', description: "description1" }
+]
 
 const UpdatePlace = () => {
 	const [isLoading, setIsLoading] = useState(true);
