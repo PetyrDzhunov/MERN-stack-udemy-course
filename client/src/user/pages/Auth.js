@@ -9,7 +9,7 @@ import './Auth.css';
 import Card from '../../shared/components/UIElements/Card';
 import { AuthContext } from '../../shared/context/auth-context';
 import { useHttpClient } from '../../shared/hooks/http-hook';
-
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 
 const Auth = () => {
 	const auth = useContext(AuthContext);
@@ -92,6 +92,7 @@ const Auth = () => {
 						onInput={inputHandler}
 						placeholder="Enter your name..."
 					/>}
+					{!isLoading && <ImageUpload center id="image" />}
 					<Input
 						id="email"
 						type="email"
