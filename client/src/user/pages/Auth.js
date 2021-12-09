@@ -36,7 +36,7 @@ const Auth = () => {
 					JSON.stringify({ email: formState.inputs.email.value, password: formState.inputs.password.value }),
 					{ 'Content-type': 'application/json' }
 				);
-				auth.login(responseData.user.id);
+				auth.login(responseData.userId, responseData.token);
 			} catch (err) {
 			};
 		} else {
@@ -49,7 +49,7 @@ const Auth = () => {
 				const responseData = await sendRequest("http://localhost:5000/api/users/signup", 'POST',
 					formData,
 				);
-				auth.login(responseData.user.id);
+				auth.login(responseData.userId, responseData.token);
 			} catch (error) {
 			};
 		};

@@ -19,6 +19,8 @@ app.use('/uploads/images', express.static(
 
 app.use(cors());
 
+
+
 app.use('/api/places', placesRoutes)
 app.use('/api/users', usersRoutes)
 
