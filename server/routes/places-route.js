@@ -9,7 +9,7 @@ router.get('/:pid', placesControllers.getPlaceById);
 
 router.get('/user/:uid', placesControllers.getPlacesByUserId);
 
-// router.use(checkAuth);
+router.use(checkAuth);
 
 router.post('/',
 	fileUpload.single('image'),
